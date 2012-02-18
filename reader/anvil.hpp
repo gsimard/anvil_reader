@@ -12,7 +12,7 @@ struct ChunkID {
 enum compression_e {gzip = 1, zlib = 2};
 
 union compression_t {
-    compression_e c;
+    compression_e e;
     byte b;
 };
 

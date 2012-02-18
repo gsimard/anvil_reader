@@ -13,7 +13,7 @@ int main( int argc, char* argv[] )
     }
 
     ifstream mc_anvil_file;
-    mc_anvil_file.open( argv[1] );
+    mc_anvil_file.open( argv[1], ios::binary );
 
     Anvil anvil;
     mc_anvil_file >> anvil;
