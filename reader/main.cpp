@@ -22,13 +22,12 @@ int main( int argc, char* argv[] )
     cout << "Number of chunks: " << anvil.NumChunks() << endl;
     cout << "Total space used by chunks: " << anvil.ChunksTotalSize() << endl;
 
-    cout << "hello" << endl;
-
     for ( int i = 0 ; i < 1024 ; i++ )
     {
-        cout << anvil.chunks[i].id.offset;
         if (anvil.chunks[i].id.offset != 0)
-            cout << anvil.chunks[i].id.offset * 4096 << endl;
+        {
+
+        }
     }
 
     return 0;

@@ -8,8 +8,8 @@ istream & operator>>(istream& input, Anvil& obj)
     for ( int i = 0 ; i < 1024 ; i++ )
     {
         input.read((char*)data, 4);
-        obj.chunks[i].id.offset = ((unsigned long int)data[0])<<16 + ((unsigned long int)data[1])<<8 + ((unsigned long int)data[2]);
-        cout << obj.chunks[i].id.offset << endl;
+
+        obj.chunks[i].id.offset = (((unsigned long int)data[0])<<16) + (((unsigned long int)data[1])<<8) + ((unsigned long int)data[2]);
         obj.chunks[i].id.sector_count = data[3];
     }
 
@@ -29,7 +29,7 @@ unsigned short int Anvil::NumChunks()
 
     for ( int i = 0 ; i < 1024 ; i++ )
     {
-        if (chunks[i].id.offset == 0 && chunks[i].id.sector_count == 0)
+        if (chunks[i].id.offset != 0 && chunks[i].id.sector_count != 0)
             r++;
     }
 
