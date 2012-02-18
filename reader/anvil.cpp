@@ -1,5 +1,6 @@
 #include "anvil.hpp"
 #include <cstring>
+#include <zlib.h>
 
 unsigned short int endian_swap(unsigned short int x)
 {
@@ -73,11 +74,14 @@ istream & operator>>(istream& input, Anvil& obj)
 }
 
 // >> Chunk
+#define ZLIB_BUF_SIZE 128*1024
 istream & operator>>(istream& input, Chunk& obj)
 {
-    byte data[4];
+    byte *zlib_src  = new byte[ZLIB_BUF_SIZE];
+    byte *zlib_dest = new byte[ZLIB_BUF_SIZE];
 
     // read chunk length
+    byte data[4];
     input.read( (char*)data, 4 );
     obj.length = endian_swap( *(unsigned long int*)data );
     // DEBUG
@@ -91,11 +95,34 @@ istream & operator>>(istream& input, Chunk& obj)
     // read data
     if (obj.length > 0)
     {
-        obj.data = new byte[obj.length-1];
-        input.read( (char*)obj.data, obj.length-1 );
+        input.read( (char*)zlib_src, obj.length-1 );
+
+        unsigned long int destLen = ZLIB_BUF_SIZE;
+        int zlib_res = uncompress( zlib_dest, &destLen, zlib_src, obj.length-1 );
+
+        if (zlib_res == Z_OK)
+        {
+            // set the data to the uncompressed data
+            obj.data = new byte[destLen];
+            memcpy( obj.data, zlib_dest, destLen );
+
+            // change the length to the uncompressed data
+            obj.length = destLen;
+        }
+        else
+        {
+            //   uncompress returns Z_OK if success, Z_MEM_ERROR if there was not
+            //   enough memory, Z_BUF_ERROR if there was not enough room in the output
+            //   buffer, or Z_DATA_ERROR if the input data was corrupted or incomplete.
+            obj.data = NULL;
+            cout << "zlib: error " << zlib_res << endl;
+        }
     }
     else obj.data = NULL;
     //cout << "Data length: " << obj.length << endl;
+
+    delete zlib_src;
+    delete zlib_dest;
 
 	return input;
 }
