@@ -21,6 +21,9 @@ struct Chunk {
 
     unsigned long int length;
     compression_t compression_type;
+    byte *data;
+
+	friend istream& operator>>( istream &input,  Chunk& obj );
 };
 
 struct Anvil {
