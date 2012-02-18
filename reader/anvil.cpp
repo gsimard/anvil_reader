@@ -127,6 +127,13 @@ istream & operator>>(istream& input, Chunk& obj)
 	return input;
 }
 
+// dtor
+Chunk::~Chunk()
+{
+    delete data;
+    data = NULL;
+}
+
 unsigned short int Anvil::NumChunks()
 {
     unsigned short int r = 0;

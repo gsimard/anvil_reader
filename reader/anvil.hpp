@@ -24,6 +24,8 @@ struct Chunk {
     byte *data;
 
 	friend istream& operator>>( istream &input,  Chunk& obj );
+
+    ~Chunk();
 };
 
 struct Anvil {
