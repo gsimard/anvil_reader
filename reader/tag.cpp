@@ -6,10 +6,15 @@
 using namespace std;
 
 // >> Tag
-istream& Tag::Read( istream& input )
+istream& Tag::Read( istream& input, bool skip_header )
 {
     // read tag type (one byte)
-    tag_type.b = ReadByte( input );
+    if (skip_header == false)
+    {
+        tag_type.b = ReadByte( input );
+        name = ReadString( input );
+    }
+
     // DEBUG
     cout << "Type: " << (unsigned long int)tag_type.b << endl;
 
@@ -38,14 +43,14 @@ istream& Tag::Read( istream& input )
         tag_list_type.b = ReadByte( input );
         tag_list_size = ReadLongInt( input );
 
+        tags.clear();
         for( int i = 0 ; i < tag_list_size ; i++ )
         {
             Tag tag;
             tag.tag_type.b = tag_list_type.b;
 
-            // FIXME !!
-            // Here we should load WITHOUT name nor type, actually, we should skip the "header"
-            tag.Read( input );
+            // read WITHOUT header
+            tag.Read( input, true );
             tags.push_back( tag );
         }
 
@@ -54,8 +59,8 @@ istream& Tag::Read( istream& input )
     case TAG_Compound:
     {
         Tag tag;
-        name = ReadString( input );
 
+        // read WITH header
         tags.clear();
         while ( tag.Read( input ), tag.tag_type.e != TAG_End)
             tags.push_back( tag );

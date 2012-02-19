@@ -46,7 +46,7 @@ struct Tag
     unsigned long int tag_list_size;
     tag_t tag_list_type;
 
-    std::istream& Read( std::istream& input );
+    std::istream& Read( std::istream& input, bool skip_header = false );
 
     Tag();
     ~Tag();

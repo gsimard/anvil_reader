@@ -17,8 +17,8 @@ istream& Anvil::Read( istream& input )
         input.read((char*)m_data, 4);
 
         chunks[i].id.offset = (((unsigned long int)m_data[0])<<16) +
-                                  (((unsigned long int)m_data[1])<<8)  +
-                                  ((unsigned long int)m_data[2]);
+                              (((unsigned long int)m_data[1])<<8)  +
+                               ((unsigned long int)m_data[2]);
         chunks[i].id.sector_count = m_data[3];
     }
 
