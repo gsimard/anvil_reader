@@ -6,17 +6,14 @@
 
 
 // >> Tag
-istream & operator>>(istream& input, Tag& obj)
+istream& Tag::Read( istream& input )
 {
-    byte m_data[4];
-    Tag tag;
-
     // read tag type (one byte)
-    input.read( (char*)&obj.tag_type.b, 1 );
+    tag_type.b = Tag::ReadByte( input );
     // DEBUG
-    cout << "Type: " << (unsigned long int)obj.tag_type.b << endl;
+    cout << "Type: " << (unsigned long int)tag_type.b << endl;
 
-    switch( obj.tag_type.e )
+    switch( tag_type.e )
     {
     case TAG_End:
         break;
@@ -37,14 +34,32 @@ istream & operator>>(istream& input, Tag& obj)
     case TAG_String:
         break;
     case TAG_List:
+        // read tag type (one byte)
+        tag_list_type.b = Tag::ReadByte( input );
+        tag_list_size = Tag::ReadLongInt( input );
+
+        for( int i = 0 ; i < tag_list_size ; i++ )
+        {
+            Tag tag;
+            tag.tag_type.b = tag_list_type.b;
+
+            // FIXME !!
+            // Here we should load WITHOUT name nor type, actually, we should skip the "header"
+            tag.Read( input );
+            tags.push_back( tag );
+        }
+
         break;
+
     case TAG_Compound:
-        obj.name = Tag::ReadName( input );
+    {
+        Tag tag;
+        name = Tag::ReadName( input );
 
-        obj.tags.clear();
-        while (input >> tag, tag.tag_type.e != TAG_End)
-            obj.tags.push_back( tag );
-
+        tags.clear();
+        while ( tag.Read( input ), tag.tag_type.e != TAG_End)
+            tags.push_back( tag );
+    }
         break;
 
     case TAG_Int_Array:
@@ -58,14 +73,42 @@ istream & operator>>(istream& input, Tag& obj)
 	return input;
 }
 
+byte Tag::ReadByte(istream& input)
+{
+    byte r;
+
+    input.read( (char*)&r, 1 );
+
+    return r;
+}
+
+unsigned short int Tag::ReadShortInt(istream& input)
+{
+    unsigned short int r;
+    byte m_data[2];
+
+    input.read( (char*)m_data, 2 );
+    r = endian_swap( *(unsigned short int*)m_data );
+
+    return r;
+}
+
+unsigned long int Tag::ReadLongInt(istream& input)
+{
+    unsigned long int r;
+    byte m_data[4];
+
+    input.read( (char*)m_data, 4 );
+    r = endian_swap( *(unsigned long int*)m_data );
+
+    return r;
+}
+
 string Tag::ReadName(istream& input)
 {
     // read string length
-    byte m_data[2];
     unsigned short int length;
-
-    input.read( (char*)m_data, 2 );
-    length = endian_swap( *(unsigned short int*)m_data );
+    length = Tag::ReadShortInt( input );
 
     // DEBUG
     cout << "Length: " << length << endl;
@@ -93,6 +136,8 @@ Tag::Tag()
     tag_double = 0.0d;
     tag_byte_array = NULL;
     tag_int_array = NULL;
+    tag_list_size = 0;
+    tag_list_type.e = TAG_End;
 }
 
 // dtor

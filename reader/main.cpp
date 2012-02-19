@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <sstream>
 #include "anvil.hpp"
 using namespace std;
 
@@ -17,7 +16,7 @@ int main( int argc, char* argv[] )
     mc_anvil_file.open( argv[1], ios::binary );
 
     Anvil anvil;
-    mc_anvil_file >> anvil;
+    anvil.Read( mc_anvil_file );
     mc_anvil_file.close();
 
     cout << "Number of chunks: " << anvil.NumChunks() << endl;

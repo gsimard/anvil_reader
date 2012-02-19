@@ -28,8 +28,6 @@ union tag_t {
 struct Tag
 {
     tag_t tag_type;
-    vector<Tag> tags;
-
     string name;
 
     byte tag_byte;
@@ -40,14 +38,22 @@ struct Tag
     double tag_double;
     byte *tag_byte_array;
     string tag_string;
-
-    // list, compound
-
     unsigned long int* tag_int_array;
+
+    // list and compound use tags for their children
+    vector<Tag> tags;
+
+    // list further uses these two
+    unsigned long int tag_list_size;
+    tag_t tag_list_type;
+
+    static byte ReadByte(istream& input);
+    static unsigned short int ReadShortInt(istream& input);
+    static unsigned long int ReadLongInt(istream& input);
 
     static string ReadName(istream& input);
 
-    friend istream& operator>>( istream &input, Tag& obj );
+    istream& Read( istream& input );
 
     Tag();
     ~Tag();

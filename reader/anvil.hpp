@@ -29,7 +29,7 @@ struct Chunk {
 
     vector<Tag> tags;
 
-	friend istream& operator>>( istream &input,  Chunk& obj );
+    istream& Read( istream& input );
 
     Chunk();
     ~Chunk();
@@ -42,5 +42,5 @@ struct Anvil {
     unsigned long int ChunksTotalSize();
     unsigned short int ChunkAt(int x, int z);
 
-	friend istream& operator>>( istream &input,  Anvil& obj );
+    istream& Read( istream& input );
 };
