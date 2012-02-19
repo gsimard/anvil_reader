@@ -72,6 +72,7 @@ istream& Tag::Read( istream& input, bool skip_header )
         break;
 
     case TAG_String:
+        tag_string = ReadString( input );
         break;
 
     case TAG_List:
