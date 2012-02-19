@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include "tag.hpp"
 using namespace std;
 
 typedef unsigned char byte;
@@ -22,6 +24,8 @@ struct Chunk {
     unsigned long int length;
     compression_t compression_type;
     byte *data;
+
+    vector<Tag> tags;
 
 	friend istream& operator>>( istream &input,  Chunk& obj );
 
