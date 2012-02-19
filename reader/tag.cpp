@@ -69,6 +69,8 @@ istream& Tag::Read( istream& input, bool skip_header )
 
         input.read( (char*)tag_byte_array, tag_byte_array_size );
 
+        cout << "Array length: " << tag_byte_array_size << endl;
+
         break;
 
     case TAG_String:
@@ -79,6 +81,8 @@ istream& Tag::Read( istream& input, bool skip_header )
         // read tag type
         tag_list_type.b = ReadByte( input );
         tag_list_size = ReadLongInt( input );
+
+        cout << "List length: " << tag_list_size << endl;
 
         tags.clear();
         for( int i = 0 ; i < tag_list_size ; i++ )
@@ -110,6 +114,8 @@ istream& Tag::Read( istream& input, bool skip_header )
 
         for( int i = 0 ; i < tag_int_array_size ; i++ )
             tag_int_array[i] = ReadLongInt( input );
+
+        cout << "Array length: " << tag_int_array_size << endl;
 
         break;
 
