@@ -61,9 +61,12 @@ public:
             for( at_chunk = 0 ; at_chunk < 1024 ; at_chunk++ )
                 if( !anvil->chunks[at_chunk].tags.empty() )
                 {
-                    it.push_back( anvil->chunks[at_chunk].tags.begin() );
+                    // the order of the push backs is CRITICAL
                     it_end.push_back( anvil->chunks[at_chunk].tags.end() );
+                    it.push_back( anvil->chunks[at_chunk].tags.begin() );
+
                     std::cout << "at_chunk: " << at_chunk << std::endl;
+                    std::cout << "depth: " << it.size() << std::endl;
                     break;
                 }
 
@@ -87,20 +90,16 @@ public:
             // the first place to look for the next tag is in THIS tag's tag list (walk down the tree)
             if( !it.back()->tags.empty() )
             {
-                std::cout << "1" << std::endl;
-                it.push_back( it.back()->tags.begin() );
+                // the order of the push backs is CRITICAL
                 it_end.push_back( it.back()->tags.end() );
+                it.push_back( it.back()->tags.begin() );
             }
             // THIS tag's tag list is empty, which means we have arrived at a leaf of the tree
             else
             {
-                std::cout << "2" << std::endl;
-
                 // if we have reached the end of this tag's tag vector
                 while ( ++(it.back()) == it_end.back() )
                 {
-                    std::cout << "3" << std::endl;
-
                     // get back one level
                     it.pop_back();
                     it_end.pop_back();
@@ -108,8 +107,6 @@ public:
                     // if the depth is now zero, this chunk has no more tags, go to the next chunk
                     if ( it.size() == 0 )
                     {
-                        std::cout << "5" << std::endl;
-
                         // find the next chunk which has tags in its vector
                         while ( ++at_chunk < 1024 )
                         {
@@ -117,8 +114,9 @@ public:
                             {
                                 std::cout << "at_chunk: " << at_chunk << std::endl;
 
-                                it.push_back( anvil->chunks[at_chunk].tags.begin() );
+                                // the order of the push backs is CRITICAL
                                 it_end.push_back( anvil->chunks[at_chunk].tags.end() );
+                                it.push_back( anvil->chunks[at_chunk].tags.begin() );
                                 break;
                             }
                         }
@@ -127,12 +125,14 @@ public:
                         if ( at_chunk == 1024 )
                             anvil = NULL;
 
+                        std::cout << "depth: " << it.size() << std::endl;
                         return *this;
                     }
                 }
             }
         }
 
+        std::cout << "depth: " << it.size() << std::endl;
         return *this;
     }
     tag_iterator operator++(int) {

@@ -23,7 +23,9 @@ int main( int argc, char* argv[] )
     cout << "Total space used by chunks: " << anvil.ChunksTotalSize() << endl;
 
     for( tag_iterator it(anvil) ; it.valid() ; ++it )
-        cout << it->name << endl;
+    {
+        cout << TAG_NAMES[it->tag_type.b] << ": " << (it->name == "" ? "____" : it->name) << endl;
+    }
 
     for ( int i = 0 ; i < 1024 ; i++ )
     {
