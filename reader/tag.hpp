@@ -37,9 +37,14 @@ struct Tag
     unsigned long long tag_long;
     float tag_float;
     double tag_double;
+
     byte *tag_byte_array;
+    unsigned long int tag_byte_array_size;
+
     std::string tag_string;
+
     unsigned long int* tag_int_array;
+    unsigned long int tag_int_array_size;
 
     // list and compound use tags for their children
     std::vector<Tag> tags;
