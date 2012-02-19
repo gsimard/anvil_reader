@@ -35,15 +35,13 @@ istream& Anvil::Read( istream& input )
             //cout << "Sector count: " << (int)chunks[i].id.sector_count << endl;
             //cout << "Offset: " << ((unsigned long int)chunks[i].id.offset * 4096) << endl;
 
-            cout << "CHUNK START" << endl;
+            cout << "***********\nCHUNK START\n***********" << endl;
 
             // seek at the proper location in the file
             input.seekg( chunks[i].id.offset * 4096, ios::beg );
             chunks[i].Read( input );
 
-            cout << "CHUNK END" << endl;
-
-            break;
+            cout << "*********\nCHUNK END\n*********" << endl;
         }
     }
 
