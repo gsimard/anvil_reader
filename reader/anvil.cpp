@@ -24,10 +24,7 @@ istream& Anvil::Read( istream& input )
 
     // read chunk timestamp
     for ( int i = 0 ; i < 1024 ; i++ )
-    {
-        input.read( (char*)m_data, 4 );
-        chunks[i].id.timestamp = endian_swap( *(unsigned long int*)m_data );
-    }
+        chunks[i].id.timestamp = ReadLongInt( input );
 
     for ( int i = 0 ; i < 1024 ; i++ )
     {
@@ -55,9 +52,7 @@ istream& Chunk::Read( istream& input )
     byte *zlib_dest = new byte[ZLIB_BUF_SIZE];
 
     // read chunk length
-    byte m_data[4];
-    input.read( (char*)m_data, 4 );
-    length = endian_swap( *(unsigned long int*)m_data );
+    length = ReadLongInt( input );
     // DEBUG
     //cout << "Chunk length: " << length << endl;
 
