@@ -29,9 +29,13 @@ istream& Tag::Read( istream& input, bool skip_header )
     {
         tag_type.b = ReadByte( input );
         // DEBUG
-        cout << "Type: " << TAG_NAMES[tag_type.b] << endl;
+        cout << endl << "Type: " << TAG_NAMES[tag_type.b] << ": " << (unsigned long int)tag_type.b << endl;
 
-        name = ReadString( input );
+        // if this is a TAG_End, there is no string, so don't try reading one
+        if (tag_type.e != TAG_End)
+            name = ReadString( input );
+        else
+            name = string("");
     }
 
     switch( tag_type.e )
@@ -93,8 +97,14 @@ istream& Tag::Read( istream& input, bool skip_header )
             Tag tag;
             tag.tag_type.b = tag_list_type.b;
 
-            // read WITHOUT header
-            tag.Read( input, true );
+            cout << endl << "List item " << i << endl;
+
+            // read WITHOUT header if not a compound type
+            if ( tag_list_type.e != TAG_Compound )
+                tag.Read( input, true );
+            else
+                tag.Read( input, false );
+
             tags.push_back( tag );
         }
 
@@ -129,6 +139,8 @@ istream& Tag::Read( istream& input, bool skip_header )
         break;
 
     default:
+        cout << "Fatal error: wrong tag type." << endl;
+        exit(0);
         break;
     }
 
