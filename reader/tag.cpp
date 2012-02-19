@@ -143,19 +143,25 @@ istream& Tag::Read( istream& input, bool skip_header )
 // copy
 Tag::Tag( const Tag& src )
 {
+    tags = src.tags;
     tag_type.e = src.tag_type.e;
+    name = src.name;
+
     tag_byte = src.tag_byte;
     tag_short = src.tag_short;
     tag_int = src.tag_int;
     tag_long = src.tag_long;
     tag_float = src.tag_float;
     tag_double = src.tag_double;
+
     tag_list_size = src.tag_list_size;
     tag_list_type.e = src.tag_list_type.e;
 
     tag_byte_array_size = src.tag_byte_array_size;
     tag_byte_array = new byte[tag_byte_array_size];
     std::copy( src.tag_byte_array, src.tag_byte_array + src.tag_byte_array_size, tag_byte_array );
+
+    tag_string = src.tag_string;
 
     tag_int_array_size = src.tag_int_array_size;
     tag_int_array = new unsigned long int[tag_int_array_size];
