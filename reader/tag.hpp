@@ -3,6 +3,8 @@
 
 typedef unsigned char byte;
 
+extern std::string TAG_NAMES[12];
+
 enum tag_e
 {
     TAG_End = 0,

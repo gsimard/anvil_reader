@@ -66,7 +66,7 @@ string ReadString(istream& input)
     length = ReadShortInt( input );
 
     // DEBUG
-    cout << "Length: " << length << endl;
+    cout << "String length: " << length << endl;
 
     char *m_char = new char[length];
     input.read( m_char, length );

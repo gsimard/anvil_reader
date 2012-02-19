@@ -5,6 +5,22 @@
 #include "endian.hpp"
 using namespace std;
 
+std::string TAG_NAMES[12]
+{
+    "TAG_End",
+        "TAG_Byte",
+        "TAG_Short",
+        "TAG_Int",
+        "TAG_Long",
+        "TAG_Float",
+        "TAG_Double",
+        "TAG_Byte_Array",
+        "TAG_String",
+        "TAG_List",
+        "TAG_Compound",
+        "TAG_Int_Array"
+};
+
 // >> Tag
 istream& Tag::Read( istream& input, bool skip_header )
 {
@@ -12,11 +28,11 @@ istream& Tag::Read( istream& input, bool skip_header )
     if (skip_header == false)
     {
         tag_type.b = ReadByte( input );
+        // DEBUG
+        cout << "Type: " << TAG_NAMES[tag_type.b] << endl;
+
         name = ReadString( input );
     }
-
-    // DEBUG
-    cout << "Type: " << (unsigned long int)tag_type.b << endl;
 
     switch( tag_type.e )
     {
