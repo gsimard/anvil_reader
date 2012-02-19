@@ -99,12 +99,8 @@ istream& Tag::Read( istream& input, bool skip_header )
 
             cout << endl << "List item " << i << endl;
 
-            // read WITHOUT header if not a compound type
-            if ( tag_list_type.e != TAG_Compound )
-                tag.Read( input, true );
-            else
-                tag.Read( input, false );
-
+            // read WITHOUT header
+            tag.Read( input, true );
             tags.push_back( tag );
         }
 
