@@ -6,7 +6,7 @@ using namespace std;
 
 int main( int argc, char* argv[] )
 {
-    if (argc != 2)
+    if( argc != 2 )
     {
         cout << "Usage: " << argv[0] << " file" << endl;
         return 1;
@@ -22,6 +22,13 @@ int main( int argc, char* argv[] )
     cout << "Number of chunks: " << anvil.NumChunks() << endl;
     cout << "Total space used by chunks: " << anvil.ChunksTotalSize() << endl;
 
+    tag_iterator it(anvil);
+
+    while( true )
+    {
+        cout << it++->name << endl;
+    }
+
     for ( int i = 0 ; i < 1024 ; i++ )
     {
         if (anvil.chunks[i].data != NULL)
@@ -30,8 +37,6 @@ int main( int argc, char* argv[] )
             mc_chunk_file.open( "chunk.dat", ios::binary );
             mc_chunk_file.write( (char*)anvil.chunks[i].data, anvil.chunks[i].length );
             mc_chunk_file.close();
-
-            break;
         }
     }
 
