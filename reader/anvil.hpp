@@ -71,41 +71,31 @@ public:
         : anvil(x.anvil), at_chunk(x.at_chunk), it(x.it) {}
     ~tag_iterator() {}
 
-//    bool operator!=(const tag_iterator& rhs) {return anvil!=NULL;}
-
     bool valid() { return anvil != NULL; }
 
     const Tag& operator*() const { return *it; }
     const Tag* operator->() const { return &*it; }
     tag_iterator& operator++() {
-        // FIXME
-//        if (in_stream && !(*in_stream >> value)) in_stream=0;
-
-        std::cout << "1" << std::endl;
 
         // if we have reached the end of this chunk's tag vector
-//        if( anvil && (it == NULL || ++it == anvil->chunks[at_chunk++].tags.end()) )
         if( anvil && ++it == anvil->chunks[at_chunk].tags.end() )
         {
             // find the next chunk which has tags in its vector
-            // note that if it was NULL,
             while ( ++at_chunk < 1024 )
             {
-                std::cout << "at_chunk: " << at_chunk << std::endl;
-
                 if( !anvil->chunks[at_chunk].tags.empty() )
                 {
+                    std::cout << "at_chunk: " << at_chunk << std::endl;
+
                     it = anvil->chunks[at_chunk].tags.begin();
                     break;
                 }
             }
 
-            // we have exchausted all the chunks, release anvil, and "it" should be NULL by now
+            // we have exchausted all the chunks, set anvil to NULL to valid() can return false
             if ( at_chunk == 1024 )
                 anvil = NULL;
         }
-
-        std::cout << "2" << std::endl;
 
         return *this;
     }
