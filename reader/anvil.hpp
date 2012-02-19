@@ -49,7 +49,10 @@ class tag_iterator :
 {
     Anvil *anvil;
     unsigned short int at_chunk;
-    std::vector<Tag>::iterator it;
+    // a vector of iterators to vectors of tags, used for walking the tree
+    // the iterator at the back is the tip
+    std::vector<std::vector<Tag>::iterator> it;
+    std::vector<std::vector<Tag>::iterator> it_end;
 
 public:
     tag_iterator() : anvil(NULL) {}
@@ -58,7 +61,9 @@ public:
             for( at_chunk = 0 ; at_chunk < 1024 ; at_chunk++ )
                 if( !anvil->chunks[at_chunk].tags.empty() )
                 {
-                    it = anvil->chunks[at_chunk].tags.begin();
+                    it.push_back( anvil->chunks[at_chunk].tags.begin() );
+                    it_end.push_back( anvil->chunks[at_chunk].tags.end() );
+                    std::cout << "at_chunk: " << at_chunk << std::endl;
                     break;
                 }
 
@@ -68,33 +73,64 @@ public:
             *this;
         }
     tag_iterator(const tag_iterator& x)
-        : anvil(x.anvil), at_chunk(x.at_chunk), it(x.it) {}
+        : anvil(x.anvil), at_chunk(x.at_chunk), it(x.it), it_end(x.it_end) {}
     ~tag_iterator() {}
 
     bool valid() { return anvil != NULL; }
 
-    const Tag& operator*() const { return *it; }
-    const Tag* operator->() const { return &*it; }
+    const Tag& operator*() const { return *(it.back()); }
+    const Tag* operator->() const { return &*(it.back()); }
     tag_iterator& operator++() {
 
-        // if we have reached the end of this chunk's tag vector
-        if( anvil && ++it == anvil->chunks[at_chunk].tags.end() )
+        if( anvil )
         {
-            // find the next chunk which has tags in its vector
-            while ( ++at_chunk < 1024 )
+            // the first place to look for the next tag is in THIS tag's tag list (walk down the tree)
+            if( !it.back()->tags.empty() )
             {
-                if( !anvil->chunks[at_chunk].tags.empty() )
-                {
-                    std::cout << "at_chunk: " << at_chunk << std::endl;
+                std::cout << "1" << std::endl;
+                it.push_back( it.back()->tags.begin() );
+                it_end.push_back( it.back()->tags.end() );
+            }
+            // THIS tag's tag list is empty, which means we have arrived at a leaf of the tree
+            else
+            {
+                std::cout << "2" << std::endl;
 
-                    it = anvil->chunks[at_chunk].tags.begin();
-                    break;
+                // if we have reached the end of this tag's tag vector
+                while ( ++(it.back()) == it_end.back() )
+                {
+                    std::cout << "3" << std::endl;
+
+                    // get back one level
+                    it.pop_back();
+                    it_end.pop_back();
+
+                    // if the depth is now zero, this chunk has no more tags, go to the next chunk
+                    if ( it.size() == 0 )
+                    {
+                        std::cout << "5" << std::endl;
+
+                        // find the next chunk which has tags in its vector
+                        while ( ++at_chunk < 1024 )
+                        {
+                            if( !anvil->chunks[at_chunk].tags.empty() )
+                            {
+                                std::cout << "at_chunk: " << at_chunk << std::endl;
+
+                                it.push_back( anvil->chunks[at_chunk].tags.begin() );
+                                it_end.push_back( anvil->chunks[at_chunk].tags.end() );
+                                break;
+                            }
+                        }
+
+                        // we have exchausted all the chunks, set anvil to NULL so valid() can return false
+                        if ( at_chunk == 1024 )
+                            anvil = NULL;
+
+                        return *this;
+                    }
                 }
             }
-
-            // we have exchausted all the chunks, set anvil to NULL to valid() can return false
-            if ( at_chunk == 1024 )
-                anvil = NULL;
         }
 
         return *this;
