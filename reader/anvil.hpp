@@ -52,11 +52,28 @@ class tag_iterator :
     std::vector<Tag>::iterator it;
 
 public:
-    tag_iterator() : anvil(NULL), at_chunk(0) {}
-    tag_iterator(Anvil& a) : anvil(&a), at_chunk(0) { it = anvil->chunks[0].tags.begin(); ++*this; }
+    tag_iterator() : anvil(NULL) {}
+    tag_iterator(Anvil& a) : anvil(&a)
+        {
+            for( at_chunk = 0 ; at_chunk < 1024 ; at_chunk++ )
+                if( !anvil->chunks[at_chunk].tags.empty() )
+                {
+                    it = anvil->chunks[at_chunk].tags.begin();
+                    break;
+                }
+
+            if( at_chunk == 1024 )
+                anvil = NULL;
+
+            *this;
+        }
     tag_iterator(const tag_iterator& x)
         : anvil(x.anvil), at_chunk(x.at_chunk), it(x.it) {}
     ~tag_iterator() {}
+
+//    bool operator!=(const tag_iterator& rhs) {return anvil!=NULL;}
+
+    bool valid() { return anvil != NULL; }
 
     const Tag& operator*() const { return *it; }
     const Tag* operator->() const { return &*it; }
@@ -67,18 +84,20 @@ public:
         std::cout << "1" << std::endl;
 
         // if we have reached the end of this chunk's tag vector
+//        if( anvil && (it == NULL || ++it == anvil->chunks[at_chunk++].tags.end()) )
         if( anvil && ++it == anvil->chunks[at_chunk].tags.end() )
         {
             // find the next chunk which has tags in its vector
+            // note that if it was NULL,
             while ( ++at_chunk < 1024 )
             {
                 std::cout << "at_chunk: " << at_chunk << std::endl;
 
-                it = anvil->chunks[at_chunk].tags.begin();
-
-                // we have found a chunk with tags, stop searching
-                if( it != anvil->chunks[at_chunk].tags.end() )
+                if( !anvil->chunks[at_chunk].tags.empty() )
+                {
+                    it = anvil->chunks[at_chunk].tags.begin();
                     break;
+                }
             }
 
             // we have exchausted all the chunks, release anvil, and "it" should be NULL by now

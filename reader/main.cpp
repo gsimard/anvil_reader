@@ -8,7 +8,7 @@ int main( int argc, char* argv[] )
 {
     if( argc != 2 )
     {
-        cout << "Usage: " << argv[0] << " file" << endl;
+        cerr << "Usage: " << argv[0] << " file" << endl;
         return 1;
     }
 
@@ -19,15 +19,11 @@ int main( int argc, char* argv[] )
     anvil.Read( mc_anvil_file );
     mc_anvil_file.close();
 
-    cout << "Number of chunks: " << anvil.NumChunks() << endl;
+    cout << "Number of chunks: " << anvil.NumChunks() << "/1024" << endl;
     cout << "Total space used by chunks: " << anvil.ChunksTotalSize() << endl;
 
-    tag_iterator it(anvil);
-
-    while( true )
-    {
-        cout << it++->name << endl;
-    }
+    for( tag_iterator it(anvil) ; it.valid() ; ++it )
+        cout << it->name << endl;
 
     for ( int i = 0 ; i < 1024 ; i++ )
     {

@@ -29,7 +29,7 @@ istream& Tag::Read( istream& input, bool skip_header )
     {
         tag_type.b = ReadByte( input );
         // DEBUG
-        cout << endl << "Type: " << TAG_NAMES[tag_type.b] << ": " << (unsigned long int)tag_type.b << endl;
+        //cout << endl << "Type: " << TAG_NAMES[tag_type.b] << ": " << (unsigned long int)tag_type.b << endl;
 
         // if this is a TAG_End, there is no string, so don't try reading one
         if (tag_type.e != TAG_End)
@@ -73,7 +73,7 @@ istream& Tag::Read( istream& input, bool skip_header )
 
         input.read( (char*)tag_byte_array, tag_byte_array_size );
 
-        cout << "Array length: " << tag_byte_array_size << endl;
+        //cout << "Array length: " << tag_byte_array_size << endl;
 
         break;
 
@@ -86,7 +86,7 @@ istream& Tag::Read( istream& input, bool skip_header )
         tag_list_type.b = ReadByte( input );
         tag_list_size = ReadLongInt( input );
 
-        cout << "List length: " << tag_list_size << endl;
+        //cout << "List length: " << tag_list_size << endl;
 
         tags.clear();
         for( int i = 0 ; i < tag_list_size ; i++ )
@@ -94,7 +94,7 @@ istream& Tag::Read( istream& input, bool skip_header )
             Tag tag;
             tag.tag_type.b = tag_list_type.b;
 
-            cout << endl << "List item " << i << endl;
+            //cout << endl << "List item " << i << endl;
 
             // read WITHOUT header
             tag.Read( input, true );
@@ -127,12 +127,12 @@ istream& Tag::Read( istream& input, bool skip_header )
         for( int i = 0 ; i < tag_int_array_size ; i++ )
             tag_int_array[i] = ReadLongInt( input );
 
-        cout << "Array length: " << tag_int_array_size << endl;
+        //cout << "Array length: " << tag_int_array_size << endl;
 
         break;
 
     default:
-        cout << "Fatal error: wrong tag type." << endl;
+        cerr << "Fatal error: wrong tag type." << endl;
         exit(0);
         break;
     }

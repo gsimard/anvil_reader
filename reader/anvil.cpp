@@ -35,13 +35,13 @@ istream& Anvil::Read( istream& input )
             //cout << "Sector count: " << (int)chunks[i].id.sector_count << endl;
             //cout << "Offset: " << ((unsigned long int)chunks[i].id.offset * 4096) << endl;
 
-            cout << "***********\nCHUNK START\n***********" << endl;
+            //cout << "***********\nCHUNK START\n***********" << endl;
 
             // seek at the proper location in the file
             input.seekg( chunks[i].id.offset * 4096, ios::beg );
             chunks[i].Read( input );
 
-            cout << "*********\nCHUNK END\n*********" << endl;
+            //cout << "*********\nCHUNK END\n*********" << endl;
         }
     }
 
@@ -96,7 +96,7 @@ istream& Chunk::Read( istream& input )
             //   enough memory, Z_BUF_ERROR if there was not enough room in the output
             //   buffer, or Z_DATA_ERROR if the input data was corrupted or incomplete.
             data = NULL;
-            cout << "zlib: error " << zlib_res << endl;
+            cerr << "zlib: error " << zlib_res << endl;
         }
     }
     else data = NULL;

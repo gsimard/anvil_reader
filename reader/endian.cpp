@@ -89,14 +89,14 @@ string ReadString(istream& input)
     length = ReadShortInt( input );
 
     // DEBUG
-    cout << "String length: " << length << endl;
+    //cout << "String length: " << length << endl;
 
     char *m_char = new char[length];
     input.read( m_char, length );
 
     string s( m_char, length );
     // DEBUG
-    cout << "String: " << s << endl;
+    //cout << "String: " << s << endl;
 
     delete m_char;
     return s;
