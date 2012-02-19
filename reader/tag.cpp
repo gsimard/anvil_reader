@@ -82,9 +82,6 @@ istream& Tag::Read( istream& input, bool skip_header )
         break;
 
     case TAG_List:
-        //FIXME
-        cout << "about to read list" << endl;
-
         // read tag type
         tag_list_type.b = ReadByte( input );
         tag_list_size = ReadLongInt( input );
