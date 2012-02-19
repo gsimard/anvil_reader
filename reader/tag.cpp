@@ -39,23 +39,29 @@ istream& Tag::Read( istream& input, bool skip_header )
     case TAG_End:
         break;
     case TAG_Byte:
+        tag_byte = ReadByte( input );
         break;
     case TAG_Short:
+        tag_short = ReadShortInt( input );
         break;
     case TAG_Int:
+        tag_int = ReadLongInt( input );
         break;
     case TAG_Long:
+        tag_long = ReadLongLongInt( input );
         break;
     case TAG_Float:
+        tag_float = ReadFloat( input );
         break;
     case TAG_Double:
+        tag_double = ReadDouble( input );
         break;
     case TAG_Byte_Array:
         break;
     case TAG_String:
         break;
     case TAG_List:
-        // read tag type (one byte)
+        // read tag type
         tag_list_type.b = ReadByte( input );
         tag_list_size = ReadLongInt( input );
 
@@ -88,8 +94,6 @@ istream& Tag::Read( istream& input, bool skip_header )
     default:
         break;
     }
-
-    exit(0);
 
 	return input;
 }

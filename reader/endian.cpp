@@ -59,6 +59,29 @@ unsigned long int ReadLongInt(istream& input)
     return r;
 }
 
+unsigned long long int ReadLongLongInt(istream& input)
+{
+    unsigned long int r;
+    unsigned char m_data[8];
+
+    input.read( (char*)m_data, 8 );
+    r = endian_swap( *(unsigned long int*)m_data );
+
+    return r;
+}
+
+float ReadFloat(istream& input)
+{
+    unsigned long int r = ReadLongInt( input );
+    return *(float*)&r;
+}
+
+double ReadDouble(istream& input)
+{
+    unsigned long long int r = ReadLongLongInt( input );
+    return *(double*)&r;
+}
+
 string ReadString(istream& input)
 {
     // read string length

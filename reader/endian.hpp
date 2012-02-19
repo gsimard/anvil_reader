@@ -4,6 +4,9 @@
 unsigned char ReadByte(std::istream& input);
 unsigned short int ReadShortInt(std::istream& input);
 unsigned long int ReadLongInt(std::istream& input);
+unsigned long long int ReadLongLongInt(std::istream& input);
+float ReadFloat(std::istream& input);
+double ReadDouble(std::istream& input);
 
 std::string ReadString(std::istream& input);
 
