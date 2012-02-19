@@ -113,6 +113,21 @@ istream & operator>>(istream& input, Chunk& obj)
 	return input;
 }
 
+ChunkID::ChunkID()
+{
+    offset = 0;
+    sector_count = 0;
+    timestamp = 0;
+}
+
+// ctor
+Chunk::Chunk()
+{
+    length = 0;
+    compression_type.e = none;
+    data = NULL;
+}
+
 // dtor
 Chunk::~Chunk()
 {

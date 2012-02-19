@@ -14,7 +14,7 @@ istream & operator>>(istream& input, Tag& obj)
     // read tag type (one byte)
     input.read( (char*)&obj.tag_type.b, 1 );
     // DEBUG
-    cout << obj.tag_type.e << endl;
+    cout << "Type: " << (unsigned long int)obj.tag_type.b << endl;
 
     switch( obj.tag_type.e )
     {
@@ -79,6 +79,20 @@ string Tag::ReadName(istream& input)
 
     delete m_char;
     return s;
+}
+
+// ctor
+Tag::Tag()
+{
+    tag_type.e = TAG_End;
+    tag_byte = 0;
+    tag_short = 0;
+    tag_int = 0;
+    tag_long = 0;
+    tag_float = 0.0;
+    tag_double = 0.0d;
+    tag_byte_array = NULL;
+    tag_int_array = NULL;
 }
 
 // dtor

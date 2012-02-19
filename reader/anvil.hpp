@@ -9,9 +9,11 @@ struct ChunkID {
     unsigned long int offset;
     byte sector_count;
     unsigned long int timestamp;
+
+    ChunkID();
 };
 
-enum compression_e {gzip = 1, zlib = 2};
+enum compression_e {none = 0, gzip = 1, zlib = 2};
 
 union compression_t {
     compression_e e;
@@ -29,6 +31,7 @@ struct Chunk {
 
 	friend istream& operator>>( istream &input,  Chunk& obj );
 
+    Chunk();
     ~Chunk();
 };
 

@@ -48,5 +48,7 @@ struct Tag
     static string ReadName(istream& input);
 
     friend istream& operator>>( istream &input, Tag& obj );
+
+    Tag();
     ~Tag();
 };
