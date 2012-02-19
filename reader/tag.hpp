@@ -47,12 +47,6 @@ struct Tag
     unsigned long int tag_list_size;
     tag_t tag_list_type;
 
-    static byte ReadByte(istream& input);
-    static unsigned short int ReadShortInt(istream& input);
-    static unsigned long int ReadLongInt(istream& input);
-
-    static string ReadName(istream& input);
-
     istream& Read( istream& input );
 
     Tag();

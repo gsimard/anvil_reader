@@ -9,7 +9,7 @@
 istream& Tag::Read( istream& input )
 {
     // read tag type (one byte)
-    tag_type.b = Tag::ReadByte( input );
+    tag_type.b = ReadByte( input );
     // DEBUG
     cout << "Type: " << (unsigned long int)tag_type.b << endl;
 
@@ -35,8 +35,8 @@ istream& Tag::Read( istream& input )
         break;
     case TAG_List:
         // read tag type (one byte)
-        tag_list_type.b = Tag::ReadByte( input );
-        tag_list_size = Tag::ReadLongInt( input );
+        tag_list_type.b = ReadByte( input );
+        tag_list_size = ReadLongInt( input );
 
         for( int i = 0 ; i < tag_list_size ; i++ )
         {
@@ -54,7 +54,7 @@ istream& Tag::Read( istream& input )
     case TAG_Compound:
     {
         Tag tag;
-        name = Tag::ReadName( input );
+        name = ReadString( input );
 
         tags.clear();
         while ( tag.Read( input ), tag.tag_type.e != TAG_End)
@@ -71,57 +71,6 @@ istream& Tag::Read( istream& input )
     exit(0);
 
 	return input;
-}
-
-byte Tag::ReadByte(istream& input)
-{
-    byte r;
-
-    input.read( (char*)&r, 1 );
-
-    return r;
-}
-
-unsigned short int Tag::ReadShortInt(istream& input)
-{
-    unsigned short int r;
-    byte m_data[2];
-
-    input.read( (char*)m_data, 2 );
-    r = endian_swap( *(unsigned short int*)m_data );
-
-    return r;
-}
-
-unsigned long int Tag::ReadLongInt(istream& input)
-{
-    unsigned long int r;
-    byte m_data[4];
-
-    input.read( (char*)m_data, 4 );
-    r = endian_swap( *(unsigned long int*)m_data );
-
-    return r;
-}
-
-string Tag::ReadName(istream& input)
-{
-    // read string length
-    unsigned short int length;
-    length = Tag::ReadShortInt( input );
-
-    // DEBUG
-    cout << "Length: " << length << endl;
-
-    char *m_char = new char[length];
-    input.read( m_char, length );
-
-    string s( m_char, length );
-    // DEBUG
-    cout << "String: " << s << endl;
-
-    delete m_char;
-    return s;
 }
 
 // ctor
