@@ -55,6 +55,7 @@ struct Tag
 
     std::istream& Read( std::istream& input, bool skip_header = false );
 
+    Tag( const Tag& src );
     Tag();
     ~Tag();
 };

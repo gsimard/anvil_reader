@@ -78,6 +78,9 @@ istream& Tag::Read( istream& input, bool skip_header )
         break;
 
     case TAG_List:
+        //FIXME
+        cout << "about to read list" << endl;
+
         // read tag type
         tag_list_type.b = ReadByte( input );
         tag_list_size = ReadLongInt( input );
@@ -98,14 +101,20 @@ istream& Tag::Read( istream& input, bool skip_header )
         break;
 
     case TAG_Compound:
-    {
-        Tag tag;
-
-        // read WITH header
         tags.clear();
-        while ( tag.Read( input ), tag.tag_type.e != TAG_End)
-            tags.push_back( tag );
-    }
+
+        do
+        {
+            Tag tag;
+            // read WITH header
+            tag.Read( input );
+
+            if (tag.tag_type.e != TAG_End)
+                tags.push_back( tag );
+            else
+                break;
+        } while( true );
+
         break;
 
     case TAG_Int_Array:
@@ -124,6 +133,28 @@ istream& Tag::Read( istream& input, bool skip_header )
     }
 
 	return input;
+}
+
+// copy
+Tag::Tag( const Tag& src )
+{
+    tag_type.e = src.tag_type.e;
+    tag_byte = src.tag_byte;
+    tag_short = src.tag_short;
+    tag_int = src.tag_int;
+    tag_long = src.tag_long;
+    tag_float = src.tag_float;
+    tag_double = src.tag_double;
+    tag_list_size = src.tag_list_size;
+    tag_list_type.e = src.tag_list_type.e;
+
+    tag_byte_array_size = src.tag_byte_array_size;
+    tag_byte_array = new byte[tag_byte_array_size];
+    std::copy( src.tag_byte_array, src.tag_byte_array + src.tag_byte_array_size, tag_byte_array );
+
+    tag_int_array_size = src.tag_int_array_size;
+    tag_int_array = new unsigned long int[tag_int_array_size];
+    std::copy( src.tag_int_array, src.tag_int_array + src.tag_int_array_size, tag_int_array );
 }
 
 // ctor
@@ -148,5 +179,7 @@ Tag::Tag()
 Tag::~Tag()
 {
     delete tag_byte_array;
+    tag_byte_array = NULL;
     delete tag_int_array;
+    tag_int_array = NULL;
 }
