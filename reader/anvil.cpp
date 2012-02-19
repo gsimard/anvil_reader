@@ -4,7 +4,7 @@
 
 #include "anvil.hpp"
 #include "endian.hpp"
-
+using namespace std;
 
 // >> Anvil
 istream& Anvil::Read( istream& input )

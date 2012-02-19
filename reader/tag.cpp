@@ -3,7 +3,7 @@
 
 #include "tag.hpp"
 #include "endian.hpp"
-
+using namespace std;
 
 // >> Tag
 istream& Tag::Read( istream& input )

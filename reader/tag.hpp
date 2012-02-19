@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-using namespace std;
 
 typedef unsigned char byte;
 
@@ -28,7 +27,7 @@ union tag_t {
 struct Tag
 {
     tag_t tag_type;
-    string name;
+    std::string name;
 
     byte tag_byte;
     unsigned short int tag_short;
@@ -37,17 +36,17 @@ struct Tag
     float tag_float;
     double tag_double;
     byte *tag_byte_array;
-    string tag_string;
+    std::string tag_string;
     unsigned long int* tag_int_array;
 
     // list and compound use tags for their children
-    vector<Tag> tags;
+    std::vector<Tag> tags;
 
     // list further uses these two
     unsigned long int tag_list_size;
     tag_t tag_list_type;
 
-    istream& Read( istream& input );
+    std::istream& Read( std::istream& input );
 
     Tag();
     ~Tag();

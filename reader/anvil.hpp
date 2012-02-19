@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include "tag.hpp"
-using namespace std;
 
 typedef unsigned char byte;
 
@@ -27,9 +26,9 @@ struct Chunk {
     compression_t compression_type;
     byte *data;
 
-    vector<Tag> tags;
+    std::vector<Tag> tags;
 
-    istream& Read( istream& input );
+    std::istream& Read( std::istream& input );
 
     Chunk();
     ~Chunk();
@@ -42,5 +41,5 @@ struct Anvil {
     unsigned long int ChunksTotalSize();
     unsigned short int ChunkAt(int x, int z);
 
-    istream& Read( istream& input );
+    std::istream& Read( std::istream& input );
 };
