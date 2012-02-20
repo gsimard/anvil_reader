@@ -23,9 +23,6 @@ int main( int argc, char* argv[] )
     {
         if( it->tag_type.e == TAG_Byte_Array && it->name == "Blocks" )
         {
-            //cout << TAG_NAMES[it->tag_type.b] << ": " << (it->name == "" ? "____" : it->name)
-            //     << " size: " << it->tag_byte_array_size << endl;
-
             byte *tag_byte_array = it->tag_byte_array;
             unsigned long int tag_byte_array_size = it->tag_byte_array_size;
 
@@ -37,15 +34,21 @@ int main( int argc, char* argv[] )
 
             if( a_tag.parent )
             {
-                std::cout << a_tag.parent << endl;
-
                 for( std::vector<Tag*>::iterator tag_it = it->parent->tags.begin() ; tag_it < it->parent->tags.end() ; ++tag_it )
                 {
-                    std::cout << "has2 a parent" << endl;
-
                     if( (*tag_it)->tag_type.e == TAG_Byte && (*tag_it)->name == "Y" )
                     {
-                        std::cout << "this block has a parent, and an Y entry: " << (unsigned long int)(*tag_it)->tag_byte << endl;
+                        // Y is the vertical position of the 16x16x16 block in 16 increments from bottom to top
+                        int Y = (int)(*tag_it)->tag_byte;
+
+                        for( int pos = 0 ; pos < 4096 ; pos++ )
+                        {
+                            int x = pos & 0xf;
+                            int z = (pos & 0xf0) >> 4;
+                            int y = ((pos & 0xf00) >> 8) + Y*16;
+
+                            std::cout << x << " " << y << " " << z << std::endl;
+                        }
                     }
                 }
             }
