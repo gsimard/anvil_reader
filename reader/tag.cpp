@@ -91,14 +91,14 @@ istream& Tag::Read( istream& input, bool skip_header )
         tags.clear();
         for( int i = 0 ; i < tag_list_size ; i++ )
         {
-            Tag tag;
-            tag.tag_type.b = tag_list_type.b;
+            Tag* tag = new Tag();
+            tag->tag_type.b = tag_list_type.b;
 
             //cout << endl << "List item " << i << endl;
 
             // read WITHOUT header
-            tag.parent = this; // need to set parent before read because of recursion.
-            tag.Read( input, true );
+            tag->parent = this; // need to set parent before read because of recursion.
+            tag->Read( input, true );
             tags.push_back( tag );
         }
 
@@ -109,12 +109,12 @@ istream& Tag::Read( istream& input, bool skip_header )
 
         do
         {
-            Tag tag;
+            Tag* tag = new Tag();
             // read WITH header
-            tag.parent = this;  // need to set parent before read because of recursion.
-            tag.Read( input );
+            tag->parent = this;  // need to set parent before read because of recursion.
+            tag->Read( input );
 
-            if (tag.tag_type.e != TAG_End)
+            if (tag->tag_type.e != TAG_End)
                 tags.push_back( tag );
             else
                 break;

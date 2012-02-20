@@ -45,14 +45,14 @@ struct Anvil {
 };
 
 class tag_iterator :
-    public std::iterator<std::input_iterator_tag, Tag>
+    public std::iterator<std::input_iterator_tag, Tag*>
 {
     Anvil *anvil;
     unsigned short int at_chunk;
     // a vector of iterators to vectors of tags, used for walking the tree
     // the iterator at the back is the tip
-    std::vector<std::vector<Tag>::iterator> it;
-    std::vector<std::vector<Tag>::iterator> it_end;
+    std::vector<std::vector<Tag*>::iterator> it;
+    std::vector<std::vector<Tag*>::iterator> it_end;
 
 public:
     tag_iterator() : anvil(NULL) {}
@@ -78,18 +78,18 @@ public:
 
     bool valid() { return anvil != NULL; }
 
-    const Tag& operator*() const { return *(it.back()); }
-    const Tag* operator->() const { return &*(it.back()); }
+    const Tag& operator*() const { return **(it.back()); }
+    const Tag* operator->() const { return *(it.back()); }
     tag_iterator& operator++() {
 
         if( anvil )
         {
             // the first place to look for the next tag is in THIS tag's tag list (walk down the tree)
-            if( !it.back()->tags.empty() )
+            if( !(*it.back())->tags.empty() )
             {
                 // the order of the push backs is CRITICAL
-                it_end.push_back( it.back()->tags.end() );
-                it.push_back( it.back()->tags.begin() );
+                it_end.push_back( (*it.back())->tags.end() );
+                it.push_back( (*it.back())->tags.begin() );
             }
             // THIS tag's tag list is empty, which means we have arrived at a leaf of the tree
             else

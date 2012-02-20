@@ -39,13 +39,13 @@ int main( int argc, char* argv[] )
             {
                 std::cout << a_tag.parent << endl;
 
-                for( std::vector<Tag>::iterator tag_it = it->parent->tags.begin() ; tag_it < it->parent->tags.end() ; ++tag_it )
+                for( std::vector<Tag*>::iterator tag_it = it->parent->tags.begin() ; tag_it < it->parent->tags.end() ; ++tag_it )
                 {
                     std::cout << "has2 a parent" << endl;
 
-                    if( tag_it->tag_type.e == TAG_Byte && tag_it->name == "Y" )
+                    if( (*tag_it)->tag_type.e == TAG_Byte && (*tag_it)->name == "Y" )
                     {
-                        std::cout << "this block has a parent, and an Y entry: " << (unsigned long int)tag_it->tag_byte << endl;
+                        std::cout << "this block has a parent, and an Y entry: " << (unsigned long int)(*tag_it)->tag_byte << endl;
                     }
                 }
             }
