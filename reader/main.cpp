@@ -64,19 +64,14 @@ int main( int argc, char* argv[] )
     ofstream mc_block_file;
     mc_block_file.open( "block_count.mat", ios::out );
 
-    mc_block_file << "[";
-
     for( int i = 0 ; i < 256 ; i++ )
     {
-        mc_block_file << "[";
-
         for( int j = 0 ; j < 256 ; j++ )
             mc_block_file << block_count[i][j] << " ";
 
-        mc_block_file << "]" << std::endl;
+        mc_block_file << std::endl;
     }
 
-    mc_block_file << "]" << std::endl;
     mc_block_file.close();
 
     // Debug: save the first valid chunk in a file
