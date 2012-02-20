@@ -87,7 +87,8 @@ istream& Chunk::Read( istream& input )
             istringstream ss( m_string, ios_base::binary | ios_base::in );
 
             Tag tag;
-            tag.Read( ss );
+            tag.parent = NULL;
+            tag.Read( ss ); // need to set parent before read because of recursion.
             tags.push_back( tag );
         }
         else

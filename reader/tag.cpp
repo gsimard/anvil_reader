@@ -97,6 +97,7 @@ istream& Tag::Read( istream& input, bool skip_header )
             //cout << endl << "List item " << i << endl;
 
             // read WITHOUT header
+            tag.parent = this; // need to set parent before read because of recursion.
             tag.Read( input, true );
             tags.push_back( tag );
         }
@@ -110,6 +111,7 @@ istream& Tag::Read( istream& input, bool skip_header )
         {
             Tag tag;
             // read WITH header
+            tag.parent = this;  // need to set parent before read because of recursion.
             tag.Read( input );
 
             if (tag.tag_type.e != TAG_End)
@@ -143,6 +145,8 @@ istream& Tag::Read( istream& input, bool skip_header )
 // copy
 Tag::Tag( const Tag& src )
 {
+    parent = src.parent;
+
     tags = src.tags;
     tag_type.e = src.tag_type.e;
     name = src.name;
@@ -171,6 +175,8 @@ Tag::Tag( const Tag& src )
 // ctor
 Tag::Tag()
 {
+    parent = NULL;
+
     tag_type.e = TAG_End;
     tag_byte = 0;
     tag_short = 0;
@@ -189,6 +195,8 @@ Tag::Tag()
 // dtor
 Tag::~Tag()
 {
+    parent = NULL;
+
     delete tag_byte_array;
     tag_byte_array = NULL;
     delete tag_int_array;

@@ -28,6 +28,8 @@ union tag_t {
 
 struct Tag
 {
+    Tag* parent;
+
     tag_t tag_type;
     std::string name;
 
@@ -47,7 +49,7 @@ struct Tag
     unsigned long int tag_int_array_size;
 
     // list and compound use tags for their children
-    std::vector<Tag> tags;
+    std::vector<Tag*> tags;
 
     // list further uses these two
     unsigned long int tag_list_size;

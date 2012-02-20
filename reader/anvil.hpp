@@ -26,7 +26,7 @@ struct Chunk {
     compression_t compression_type;
     byte *data;
 
-    std::vector<Tag> tags;
+    std::vector<Tag*> tags;
 
     std::istream& Read( std::istream& input );
 
@@ -64,9 +64,6 @@ public:
                     // the order of the push backs is CRITICAL
                     it_end.push_back( anvil->chunks[at_chunk].tags.end() );
                     it.push_back( anvil->chunks[at_chunk].tags.begin() );
-
-                    std::cout << "at_chunk: " << at_chunk << std::endl;
-                    std::cout << "depth: " << it.size() << std::endl;
                     break;
                 }
 
@@ -112,8 +109,6 @@ public:
                         {
                             if( !anvil->chunks[at_chunk].tags.empty() )
                             {
-                                std::cout << "at_chunk: " << at_chunk << std::endl;
-
                                 // the order of the push backs is CRITICAL
                                 it_end.push_back( anvil->chunks[at_chunk].tags.end() );
                                 it.push_back( anvil->chunks[at_chunk].tags.begin() );
@@ -125,14 +120,12 @@ public:
                         if ( at_chunk == 1024 )
                             anvil = NULL;
 
-                        std::cout << "depth: " << it.size() << std::endl;
                         return *this;
                     }
                 }
             }
         }
 
-        std::cout << "depth: " << it.size() << std::endl;
         return *this;
     }
     tag_iterator operator++(int) {
