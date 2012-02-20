@@ -53,7 +53,7 @@ int main( int argc, char* argv[] )
                             int y = ((pos & 0xf00) >> 8) + Y*16;
 
                             // increment count for this type of block at height y
-                            block_count[tag_byte_array[pos]][y]++;
+                            block_count[y][tag_byte_array[pos]]++;
                         }
                     }
                 }
